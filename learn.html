@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberWatch - Learning Hub</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+<!-- Navbar -->
+<header class="navbar">
+    <div class="logo">🕶️ CyberWatch</div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blogs.html">User Blogs</a></li>
+            <li><a href="learn.html" class="active">Learning</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero small-hero">
+    <div class="hero-content">
+        <h1>Learning Hub</h1>
+        <p>Tell us your skill level and interests, and we’ll suggest where to start.</p>
+    </div>
+</section>
+
+<!-- Learning Form Section -->
+<section class="news">
+    <h2>Personalized Learning</h2>
+    <form class="learning-form">
+        <label for="skill">Skill Level:</label>
+        <select id="skill" name="skill" required>
+            <option value="">-- Select your level --</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+
+        <label for="interest">What are you interested in?</label>
+        <select id="interest" name="interest" required>
+            <option value="">-- Choose an area --</option>
+            <option value="network-security">Network Security</option>
+            <option value="ethical-hacking">Ethical Hacking</option>
+            <option value="malware-analysis">Malware Analysis</option>
+            <option value="digital-forensics">Digital Forensics</option>
+            <option value="cyber-law">Cyber Law & Policy</option>
+        </select>
+
+        <button type="submit" class="btn">Get Recommendations</button>
+    </form>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© 2025 CyberWatch | Designed for Educational Use</p>
+    <div class="socials">
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+    </div>
+</footer>
+</body>
+</html>
