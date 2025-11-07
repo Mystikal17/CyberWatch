@@ -1,33 +1,41 @@
-/*------------------------------------- Index.html  -------------------------*/
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* ---------------------------------
+   GLOBAL STYLES (applies to all pages)
+--------------------------------- */
 body {
-    font-family: "Poppins", sans-serif;
-    background-color: #0a0a0a;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0d0d0d;
     color: #f0f0f0;
     line-height: 1.6;
 }
 
-/* Navbar */
+a {
+    text-decoration: none;
+    color: #00ffea;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #00b8a9;
+}
+
+/* ---------------------------------
+   NAVBAR (shared across all pages)
+--------------------------------- */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.2rem 3rem;
-    background: #121212;
+    background: #111;
+    padding: 1rem 2rem;
     position: sticky;
     top: 0;
+    z-index: 1000;
 }
 
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #00ffea;
 }
 
 .navbar ul {
@@ -38,64 +46,77 @@ body {
 
 .navbar a {
     color: #f0f0f0;
-    text-decoration: none;
-    transition: color 0.3s;
+    font-weight: 500;
 }
 
 .navbar a:hover {
     color: #00ffea;
 }
 
-/* Hero Section */
+/* Active page link styling */
+.navbar a.active {
+    color: #00ffea;
+    border-bottom: 2px solid #00ffea;
+}
+
+/* ---------------------------------
+   HERO SECTIONS (used on all pages)
+--------------------------------- */
 .hero {
-    background: url('https://source.unsplash.com/1600x700/?cyber,technology') center/cover no-repeat;
-    height: 80vh;
+    height: 70vh;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+    ),
+    url('https://source.unsplash.com/1600x900/?cyber,technology');
+    background-size: cover;
+    background-position: center;
     text-align: center;
-    position: relative;
+    color: white;
+    padding: 2rem;
 }
 
-.hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 700px;
-}
-
-.hero h1 {
+.hero-content h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: #00ffea;
 }
 
-.hero p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
+.hero-content p {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: #cccccc;
 }
 
+/* Smaller hero for subpages */
+.small-hero {
+    height: 40vh;
+}
+
+/* Shared button style */
 .btn {
+    display: inline-block;
     background: #00ffea;
-    color: #000;
-    padding: 0.75rem 1.5rem;
+    color: #111;
+    padding: 0.7rem 1.2rem;
     border-radius: 5px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.3s;
+    font-weight: bold;
+    margin: 0 0.5rem;
+    transition: background 0.3s ease;
 }
 
 .btn:hover {
-    background: #00ccba;
+    background: #00b8a9;
+    color: #111; /* keeps text black on hover */
 }
 
-/* News Section */
+
+/* ---------------------------------
+   HOME PAGE - TRENDING NEWS
+   (index.html)
+--------------------------------- */
 .news {
     padding: 3rem 2rem;
     text-align: center;
@@ -104,7 +125,6 @@ body {
 .news h2 {
     color: #00ffea;
     margin-bottom: 2rem;
-    font-size: 2rem;
 }
 
 .news-grid {
@@ -117,11 +137,13 @@ body {
     background: #161616;
     border-radius: 10px;
     overflow: hidden;
-    transition: transform 0.3s;
+    box-shadow: 0 0 10px rgba(0, 255, 234, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(0, 255, 234, 0.3);
 }
 
 .card img {
@@ -137,64 +159,78 @@ body {
 
 .card p {
     margin: 0 1rem 1rem;
-    color: #cfcfcf;
+    color: #cccccc;
 }
 
 .read-more {
     display: inline-block;
-    margin: 0 1rem 1.5rem;
     color: #00ffea;
-    text-decoration: none;
+    font-weight: bold;
+    margin: 0 1rem 1rem;
+}
+
+/* ---------------------------------
+   BLOG PAGE (blogs.html)
+--------------------------------- */
+/* (The same news-grid and card styling applies here)
+   You can add future blog-specific styles below if needed */
+
+.news h2 {
+    margin-bottom: 2rem;
+}
+
+/* ---------------------------------
+   LOGIN PAGE (login.html)
+--------------------------------- */
+.login-form {
+    max-width: 400px;
+    margin: 2rem auto;
+    background: #161616;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 234, 0.2);
+    text-align: left;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #00ffea;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    background: #222;
+    color: #f0f0f0;
+}
+
+.login-form input:focus {
+    outline: 2px solid #00ffea;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.login-footer a {
+    color: #00ffea;
     font-weight: bold;
 }
 
-.read-more:hover {
+.login-footer a:hover {
     text-decoration: underline;
 }
 
-/* Footer */
-.footer {
-    background: #121212;
-    text-align: center;
-    padding: 1.5rem;
-    margin-top: 2rem;
-}
 
-.footer .socials {
-    margin-top: 0.5rem;
-}
-
-.footer a {
-    color: #00ffea;
-    margin: 0 0.5rem;
-    text-decoration: none;
-}
-
-.footer a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-    }
-
-    .hero h1 {
-        font-size: 2rem;
-    }
-}
-
-/*------------------------------------- End of Index.html -------------------------*/
-
-
-/*------------------------------------- Blogs and Learn card and drop downs -------------------------*/
-/* Smaller Hero for subpages */
-.small-hero {
-    height: 40vh;
-}
-
-/* Learning Form Styles */
+/* ---------------------------------
+   LEARNING PAGE (learn.html)
+--------------------------------- */
 .learning-form {
     max-width: 400px;
     margin: 2rem auto;
@@ -225,4 +261,47 @@ body {
 .learning-form select:focus {
     outline: 2px solid #00ffea;
 }
-/*------------------------------------- Blogs and Learn card and drop downs end -------------------------*/
+
+/* ---------------------------------
+   ABOUT PAGE (about.html)
+--------------------------------- */
+.news p a {
+    color: #00ffea;
+    font-weight: bold;
+}
+
+/* ---------------------------------
+   FOOTER (shared across all pages)
+--------------------------------- */
+.footer {
+    background: #111;
+    color: #ccc;
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: 2rem;
+}
+
+.footer .socials {
+    margin-top: 0.5rem;
+}
+
+.footer .socials a {
+    margin: 0 0.5rem;
+    color: #00ffea;
+}
+
+.footer .socials a:hover {
+    text-decoration: underline;
+}
+
+/* Cyber Watch logo button */
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f0f0f0;
+    text-decoration: none;
+}
+
+.logo:hover {
+    color: #00ffea;
+}
