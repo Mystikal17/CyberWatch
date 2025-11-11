@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberWatch - Search History</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+<!-- Navbar -->
+<header class="navbar">
+    <a href="index.html" class="logo">CyberWatch</a>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blogs.html">User Blogs</a></li>
+            <li><a href="learn.html">Learning</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="history.html" class="active">History</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero small-hero">
+    <div class="hero-content">
+        <h1>Your Search History</h1>
+        <p>Track and revisit the articles you’ve explored on CyberWatch.</p>
+    </div>
+</section>
+
+<!-- History Section -->
+<section class="news">
+    <h2>Recently Viewed Articles</h2>
+    <div class="history-list">
+        <!-- Example Entries (Later dynamically loaded by Flask) -->
+        <div class="history-item">
+            <h3>Cybersecurity Trends 2025</h3>
+            <p>Viewed on: November 6, 2025</p>
+            <a href="#" class="read-more">Read Again →</a>
+        </div>
+
+        <div class="history-item">
+            <h3>Understanding Zero Trust Networks</h3>
+            <p>Viewed on: November 4, 2025</p>
+            <a href="#" class="read-more">Read Again →</a>
+        </div>
+
+        <div class="history-item">
+            <h3>Phishing Attacks Rise Among Startups</h3>
+            <p>Viewed on: November 1, 2025</p>
+            <a href="#" class="read-more">Read Again →</a>
+        </div>
+    </div>
+
+    <button class="btn clear-history">Clear History</button>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© 2025 CyberWatch | Designed for Educational Use</p>
+    <div class="socials">
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+    </div>
+</footer>
+
+<!-- Optional: placeholder JS for Clear History -->
+<script>
+    document.querySelector('.clear-history').addEventListener('click', () => {
+        document.querySelector('.history-list').innerHTML = '<p>Your history has been cleared.</p>';
+    });
+</script>
+</body>
+</html>

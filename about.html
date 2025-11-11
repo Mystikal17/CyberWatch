@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CyberWatch - About</title>
+    <title>CyberWatch - About Us</title>
     <link rel="stylesheet" href="styles/main.css" />
 </head>
 <body>
+<!-- Navbar -->
 <header class="navbar">
     <a href="index.html" class="logo"> CyberWatch</a>
     <nav>
@@ -15,30 +16,67 @@
             <li><a href="blogs.html">User Blogs</a></li>
             <li><a href="learn.html">Learning</a></li>
             <li><a href="about.html" class="active">About</a></li>
+            <li><a href="history.html">History</a></li>
             <li><a href="login.html">Login</a></li>
         </ul>
     </nav>
 </header>
 
+<!-- Hero Section -->
 <section class="hero small-hero">
     <div class="hero-content">
         <h1>About CyberWatch</h1>
-        <p>Empowering students to understand and stay ahead in the world of cybersecurity.</p>
+        <p>Stay informed. Stay secure. Stay ahead in the digital world.</p>
     </div>
 </section>
 
-<section class="news">
-    <h2>Our Mission</h2>
-    <p style="max-width: 700px; margin: 0 auto 2rem;">
-        CyberWatch is a student-driven cybersecurity news and learning portal that brings together trending topics, community insights, and educational resources to inspire the next generation of ethical hackers, analysts, and defenders.
-    </p>
+<!-- About Section -->
+<section class="about">
+    <div class="about-container">
+        <h2>Our Mission</h2>
+        <p>
+            CyberWatch is a student-built cybersecurity news and learning hub designed to help users
+            stay updated with the latest cyber trends, learn critical security skills, and share
+            insights through user-created blogs. Our goal is to make cybersecurity education accessible,
+            engaging, and community-driven.
+        </p>
 
-    <h2>Contact Us</h2>
-    <p>Email: <a href="mailto:cyberwatch@school.edu" class="read-more">cyberwatch@school.edu</a></p>
+        <h2>What We Offer</h2>
+        <ul>
+            <li>📰 <strong>Trending News:</strong> The latest updates in cyber threats, defense, and technology.</li>
+            <li>🧠 <strong>Learning Resources:</strong> Tailored guides and skill-building materials for all experience levels.</li>
+            <li>✍️ <strong>User Blogs:</strong> A platform for users to post, discuss, and learn from each other.</li>
+            <li>📈 <strong>History Tracking:</strong> Revisit articles you've explored and track your learning journey.</li>
+        </ul>
+    </div>
 </section>
 
+<!-- Contact Section -->
+<section class="contact">
+    <div class="contact-container">
+        <h2>Contact Us</h2>
+        <p>Have questions, feedback, or ideas? We’d love to hear from you!</p>
+        <form class="contact-form" action="#" method="post">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name..." required />
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="Subject..." required />
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+    </div>
+</section>
+
+<!-- Footer -->
 <footer class="footer">
-    <p>© 2025 CyberWatch</p>
+    <p>© 2025 CyberWatch | Designed for Educational Use</p>
     <div class="socials">
         <a href="#">Twitter</a>
         <a href="#">LinkedIn</a>
