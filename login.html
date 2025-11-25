@@ -33,6 +33,7 @@
 <!-- Login Form Section -->
 <section class="news">
     <h2>Login</h2>
+    <button id="cognito-login-btn">Continue with CyberWatch Account</button>
     <form class="login-form">
         <label for="username">Username or Email:</label>
         <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -57,5 +58,21 @@
         <a href="#">GitHub</a>
     </div>
 </footer>
+<script>
+    const cognitoDomain = "https://us-east-1snjtsf16s.auth.us-east-1.amazoncognito.com";
+    const clientId = "7h06k6osrdokfdei0v99qk2dbs";
+    const redirectUri = "http://54.163.210.103/index.html";
+
+    document.getElementById("cognito-login-btn").addEventListener("click", () => {
+        const url =
+            cognitoDomain +
+            "/login?client_id=" + encodeURIComponent(clientId) +
+            "&response_type=token" +
+            "&scope=" + encodeURIComponent("openid email profile") +
+            "&redirect_uri=" + encodeURIComponent(redirectUri);
+
+        window.location.href = url;
+    });
+</script>
 </body>
 </html>
