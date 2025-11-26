@@ -61,5 +61,45 @@
         <a href="#">GitHub</a>
     </div>
 </footer>
+
+<script>
+    const API_BASE = "https://j917yl3f4d.execute-api.us-east-1.amazonaws.com/dev";
+
+    document.querySelector(".register-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirm = document.getElementById("confirm-password").value.trim();
+
+        if (password !== confirm) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert("Registration failed: " + data.message);
+                return;
+            }
+
+            alert("Registration successful! Please login.");
+            window.location.href = "login.html";
+
+        } catch (err) {
+            console.error(err);
+            alert("Registration failed. Check console.");
+        }
+    });
+</script>
+
 </body>
 </html>

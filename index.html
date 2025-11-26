@@ -68,6 +68,23 @@
         <a href="#">GitHub</a>
     </div>
 </footer>
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        const loginLink = document.querySelector('a[href="login.html"]');
+        const signupLink = document.querySelector('a[href="registration.html"]');
+
+        if (token) {
+            loginLink.textContent = "Logout";
+            loginLink.addEventListener("click", () => {
+                localStorage.clear();
+                window.location.href = "index.html";
+            });
+
+            signupLink.style.display = "none";
+        }
+    });
+</script>
 </body>
 </html>
 
