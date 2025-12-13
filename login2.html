@@ -70,37 +70,26 @@
 
 <script src="js/amazon-cognito-identity.min.js"></script>
 <script>
-    const poolData = {
-        UserPoolId: "us-east-1_T7miCG8ku",  // e.g. "us-east-1_AbCdEf123"
-        ClientId:   "738npaun27nj4l1krqfub8hhhd"  // e.g. "1a2b3c4d5e6f7g8h9i"
-    };
-    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-</script>
+    console.log("Login JS loaded ✅");
 
-<!-- Cognito + Login + MFA Scripts -->
-<script src="js/amazon-cognito-identity.min.js"></script>
-<script>
-    // Fill these in with your real values from the Cognito console
     const poolData = {
-        UserPoolId: "us-east-1_T7miCG8ku",   // e.g. "us-east-1_AbCdEf123"
-        ClientId:   "738npaun27nj4l1krqfub8hhhd"   // e.g. "1a2b3c4d5e6f7g8h9i"
+        UserPoolId: "us-east-1_T7miCG8ku",
+        ClientId: "738npaun27nj4l1krqfub8hhhd" // make sure this is your SPA client id
     };
     const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
-    const loginForm      = document.querySelector(".login-form");
-    const mfaSection     = document.getElementById("mfa-section");
-    const mfaCodeInput   = document.getElementById("mfaCode");
-    const mfaSubmitBtn   = document.getElementById("mfaSubmitBtn");
+    const loginForm    = document.querySelector(".login-form");
+    const mfaSection   = document.getElementById("mfa-section");
+    const mfaCodeInput = document.getElementById("mfaCode");
+    const mfaSubmitBtn = document.getElementById("mfaSubmitBtn");
 
-    let currentCognitoUser = null;  // will hold the user between steps
-    let currentCallbacks   = null;  // reused when sending the MFA code
+    let currentUser = null;
+    let callbacks   = null;
 
-
-    // Step 1: handle email + password submit
     loginForm.addEventListener("submit", function (e) {
-        e.preventDefault();
+        e.preventDefault(); // ✅ stops login.html?email=...&password=...
 
-        const email    = document.getElementById("email").value.trim();
+        const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
 
         const authDetails = new AmazonCognitoIdentity.AuthenticationDetails({
@@ -108,22 +97,15 @@
             Password: password
         });
 
-        const userData = {
+        currentUser = new AmazonCognitoIdentity.CognitoUser({
             Username: email,
             Pool: userPool
-        };
+        });
 
-        currentCognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-        // Define callbacks for Cognito auth and MFA
-        currentCallbacks = {
+        callbacks = {
             onSuccess: function (result) {
-                const idToken     = result.getIdToken().getJwtToken();
-                const accessToken = result.getAccessToken().getJwtToken();
-
-                // Store tokens (for calling your API / showing logged-in state)
-                localStorage.setItem("idToken", idToken);
-                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("idToken", result.getIdToken().getJwtToken());
+                localStorage.setItem("accessToken", result.getAccessToken().getJwtToken());
                 localStorage.setItem("userEmail", email);
 
                 alert("Login successful!");
@@ -131,43 +113,34 @@
             },
 
             onFailure: function (err) {
+                console.error(err);
                 alert(err.message || JSON.stringify(err));
             },
 
-            // Called when MFA (could be SMS or TOTP) is required
-            mfaRequired: function (codeDeliveryDetails) {
-                // Show MFA input section
+            mfaRequired: function () {
                 mfaSection.style.display = "block";
-                alert("MFA code required. Open your Authenticator app and enter the 6-digit code.");
+                alert("MFA required. Enter the 6-digit code from Google Authenticator.");
             },
 
-            // Some SDK versions use this specifically for software token (TOTP) MFA
-            totpRequired: function (secretCode) {
+            totpRequired: function () {
                 mfaSection.style.display = "block";
-                alert("MFA code required. Open your Authenticator app and enter the 6-digit code.");
+                alert("MFA required. Enter the 6-digit code from Google Authenticator.");
             }
         };
 
-        // Start authentication with Cognito
-        currentCognitoUser.authenticateUser(authDetails, currentCallbacks);
+        currentUser.authenticateUser(authDetails, callbacks);
     });
 
-    // Step 2: when the user submits their 6-digit MFA code
     mfaSubmitBtn.addEventListener("click", function () {
         const code = mfaCodeInput.value.trim();
-        if (!code) {
-            alert("Please enter the 6-digit code.");
-            return;
-        }
+        if (!code) return alert("Enter the 6-digit code.");
 
-        if (!currentCognitoUser || !currentCallbacks) {
-            alert("No login in progress. Please try again.");
-            return;
-        }
+        if (!currentUser || !callbacks) return alert("No login in progress. Try again.");
 
-        // For SOFTWARE_TOKEN_MFA, Cognito uses sendMFACode with the same callbacks
-        currentCognitoUser.sendMFACode(code, currentCallbacks);
+        // ✅ Explicitly tell Cognito this is TOTP MFA
+        currentUser.sendMFACode(code, callbacks, "SOFTWARE_TOKEN_MFA");
     });
 </script>
+
 </body>
 </html>
