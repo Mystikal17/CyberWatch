@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberWatch - Setup MFA</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+<header class="navbar">
+    <a href="index.html" class="logo">CyberWatch</a>
+    <!-- your nav here -->
+</header>
+
+<section class="hero small-hero">
+    <div class="hero-content">
+        <h1>Set Up Google Authenticator</h1>
+        <p>Scan the QR code with your authenticator app, then enter the 6-digit code.</p>
+    </div>
+</section>
+
+<section class="news">
+    <h2>MFA Setup</h2>
+
+    <div id="qrContainer" style="margin-bottom: 1rem;"></div>
+    <p>Or manually enter this secret in Google Authenticator:</p>
+    <code id="mfaSecret"></code>
+
+    <form id="mfaSetupForm" style="margin-top: 1rem;">
+        <label for="mfaSetupCode">6-digit code from the app:</label>
+        <input type="text" id="mfaSetupCode" required placeholder="123456" />
+        <button type="submit" class="btn">Verify & Enable MFA</button>
+    </form>
+</section>
+
+<footer class="footer">
+    <p>© 2025 CyberWatch</p>
+</footer>
+
+<script src="js/amazon-cognito-identity.min.js"></script>
+<script src="js/qrcode.min.js"></script>
+<script>
+    const poolData = {
+        UserPoolId: "us-east-1_T7miCG8ku",
+        ClientId:   "738npaun27nj4l1krqfub8hhhd"
+    };
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    const cognitoUser = userPool.getCurrentUser();
+    if (!cognitoUser) {
+        alert("You must be logged in to set up MFA.");
+        window.location.href = "login.html";
+    }
+
+    let secretFromCognito = null;
+
+    // 1. Get a valid session
+    cognitoUser.getSession(function(err, session) {
+        if (err || !session.isValid()) {
+            alert("Session invalid. Please log in again.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        // 2. Ask Cognito to generate a TOTP secret
+        cognitoUser.associateSoftwareToken({
+            onSuccess: function(result) {
+                console.log("associateSoftwareToken result:", result);
+
+                // Different SDK versions: try a few property names
+                secretFromCognito = result.SecretCode || result.secretCode || result;
+                if (!secretFromCognito) {
+                    alert("Could not get MFA secret from Cognito.");
+                    return;
+                }
+
+                // Show secret for manual entry
+                document.getElementById("mfaSecret").innerText = secretFromCognito;
+
+                // Build otpauth:// URI for Google Authenticator
+                const username = cognitoUser.getUsername();
+                const issuer   = encodeURIComponent("CyberWatch");
+                const label    = encodeURIComponent(username);
+                const otpAuthUrl =
+                    `otpauth://totp/${issuer}:${label}?secret=${secretFromCognito}&issuer=${issuer}&algorithm=SHA1&digits=6&period=30`;
+
+                // Generate QR code
+                const qrContainer = document.getElementById("qrContainer");
+                new QRCode(qrContainer, {
+                    text: otpAuthUrl,
+                    width: 200,
+                    height: 200
+                });
+            },
+            onFailure: function(err) {
+                console.error("associateSoftwareToken error:", err);
+                alert(err.message || JSON.stringify(err));
+            }
+        });
+    });
+
+    // 3. User submits 6-digit code to verify & enable MFA
+    document.getElementById("mfaSetupForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const code = document.getElementById("mfaSetupCode").value.trim();
+
+        cognitoUser.verifySoftwareToken(code, "My TOTP Device", {
+            onSuccess: function(result) {
+                console.log("verifySoftwareToken result:", result);
+
+                // 4. Tell Cognito to make software-token MFA the preferred method
+                cognitoUser.setUserMfaPreference(
+                    null, // no SMS config
+                    { PreferredMfa: true, Enabled: true }, // software token MFA
+                    function(err, res) {
+                        if (err) {
+                            console.error("setUserMfaPreference error:", err);
+                            alert(err.message || JSON.stringify(err));
+                            return;
+                        }
+                        alert("MFA has been enabled! You will need your Authenticator code when logging in.");
+                        window.location.href = "index.html";
+                    }
+                );
+            },
+            onFailure: function(err) {
+                console.error("verifySoftwareToken error:", err);
+                alert(err.message || JSON.stringify(err));
+            }
+        });
+    });
+</script>
+</body>
+</html>
