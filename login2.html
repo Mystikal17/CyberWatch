@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberWatch - Login</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+<!-- Navbar -->
+<header class="navbar">
+    <a href="index.html" class="logo"> CyberWatch</a>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blogs.html">User Blogs</a></li>
+            <li><a href="learn.html">Learning</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="registration.html">Sign Up</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="mfa-setup.html">MFA Setup</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero small-hero">
+    <div class="hero-content">
+        <h1>Welcome Back</h1>
+        <p>Log in to access your CyberWatch dashboard.</p>
+    </div>
+</section>
+
+<!-- Login Form Section -->
+<section class="news">
+    <h2>Login</h2>
+    <button id="cognito-login-btn">Continue with CyberWatch Account</button>
+    <form class="login-form">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" placeholder="Enter your email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit" class="btn">Log In</button>
+
+        <p class="login-footer">
+            Don’t have an account? <a href="registration.html">Sign up here</a>
+        </p>
+
+    </form>
+    <!-- MFA step (hidden until Cognito says MFA is required) -->
+    <div id="mfa-section" style="display:none; margin-top: 1rem;">
+        <p>Enter the 6-digit code from your Authenticator app:</p>
+        <input id="mfaCode" type="text" placeholder="123456" />
+        <button id="mfaSubmitBtn" class="btn" type="button">Submit MFA Code</button>
+    </div>
+
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© 2025 CyberWatch</p>
+    <div class="socials">
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+    </div>
+</footer>
+
+<script src="js/amazon-cognito-identity.min.js"></script>
+<script>
+    const poolData = {
+        UserPoolId: "us-east-1_T7miCG8ku",  // e.g. "us-east-1_AbCdEf123"
+        ClientId:   "738npaun27nj4l1krqfub8hhhd"  // e.g. "1a2b3c4d5e6f7g8h9i"
+    };
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+</script>
+
+<!-- Cognito + Login + MFA Scripts -->
+<script src="js/amazon-cognito-identity.min.js"></script>
+<script>
+    // Fill these in with your real values from the Cognito console
+    const poolData = {
+        UserPoolId: "us-east-1_T7miCG8ku",   // e.g. "us-east-1_AbCdEf123"
+        ClientId:   "738npaun27nj4l1krqfub8hhhd"   // e.g. "1a2b3c4d5e6f7g8h9i"
+    };
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    const loginForm      = document.querySelector(".login-form");
+    const mfaSection     = document.getElementById("mfa-section");
+    const mfaCodeInput   = document.getElementById("mfaCode");
+    const mfaSubmitBtn   = document.getElementById("mfaSubmitBtn");
+
+    let currentCognitoUser = null;  // will hold the user between steps
+    let currentCallbacks   = null;  // reused when sending the MFA code
+
+
+    // Step 1: handle email + password submit
+    loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const email    = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const authDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+            Username: email,
+            Password: password
+        });
+
+        const userData = {
+            Username: email,
+            Pool: userPool
+        };
+
+        currentCognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+        // Define callbacks for Cognito auth and MFA
+        currentCallbacks = {
+            onSuccess: function (result) {
+                const idToken     = result.getIdToken().getJwtToken();
+                const accessToken = result.getAccessToken().getJwtToken();
+
+                // Store tokens (for calling your API / showing logged-in state)
+                localStorage.setItem("idToken", idToken);
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("userEmail", email);
+
+                alert("Login successful!");
+                window.location.href = "index.html";
+            },
+
+            onFailure: function (err) {
+                alert(err.message || JSON.stringify(err));
+            },
+
+            // Called when MFA (could be SMS or TOTP) is required
+            mfaRequired: function (codeDeliveryDetails) {
+                // Show MFA input section
+                mfaSection.style.display = "block";
+                alert("MFA code required. Open your Authenticator app and enter the 6-digit code.");
+            },
+
+            // Some SDK versions use this specifically for software token (TOTP) MFA
+            totpRequired: function (secretCode) {
+                mfaSection.style.display = "block";
+                alert("MFA code required. Open your Authenticator app and enter the 6-digit code.");
+            }
+        };
+
+        // Start authentication with Cognito
+        currentCognitoUser.authenticateUser(authDetails, currentCallbacks);
+    });
+
+    // Step 2: when the user submits their 6-digit MFA code
+    mfaSubmitBtn.addEventListener("click", function () {
+        const code = mfaCodeInput.value.trim();
+        if (!code) {
+            alert("Please enter the 6-digit code.");
+            return;
+        }
+
+        if (!currentCognitoUser || !currentCallbacks) {
+            alert("No login in progress. Please try again.");
+            return;
+        }
+
+        // For SOFTWARE_TOKEN_MFA, Cognito uses sendMFACode with the same callbacks
+        currentCognitoUser.sendMFACode(code, currentCallbacks);
+    });
+</script>
+</body>
+</html>
