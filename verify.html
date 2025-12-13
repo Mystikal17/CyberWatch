@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberWatch - Verify Email</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+<!-- Navbar -->
+<header class="navbar">
+    <a href="index.html" class="logo">CyberWatch</a>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blogs.html">User Blogs</a></li>
+            <li><a href="learn.html">Learning</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="registration.html">Sign Up</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="mfa-setup.html">MFA Setup</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero small-hero">
+    <div class="hero-content">
+        <h1>Verify Your Email</h1>
+        <p>Enter the code sent to your email to activate your CyberWatch account.</p>
+    </div>
+</section>
+
+<!-- Verification Form Section -->
+<section class="news">
+    <h2>Email Verification</h2>
+    <form id="verifyForm" class="verify-form">
+        <label for="verifyEmail">Email Address:</label>
+        <input
+                type="email"
+                id="verifyEmail"
+                placeholder="Enter your email"
+                required
+        />
+
+        <label for="verifyCode">Verification Code:</label>
+        <input
+                type="text"
+                id="verifyCode"
+                placeholder="Enter the code from your email"
+                required
+        />
+
+        <button type="submit" class="btn">Verify Email</button>
+
+        <p class="login-footer">
+            Already verified? <a href="login.html">Go to Login</a>
+        </p>
+    </form>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© 2025 CyberWatch | Designed for Educational Use</p>
+    <div class="socials">
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+    </div>
+</footer>
+
+<script>alert("NEW verify.html loaded");</script>
+
+
+<!-- Cognito SDK -->
+
+<script src="js/amazon-cognito-identity.min.js"></script>
+<script>
+    const poolData = {
+        UserPoolId: "us-east-1_T7miCG8ku",  // e.g. "us-east-1_AbCdEf123"
+        ClientId:   "738npaun27nj4l1krqfub8hhhd"  // e.g. "1a2b3c4d5e6f7g8h9i"
+    };
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+</script>
+
+<!-- Local Cognito SDK -->
+<script src="js/amazon-cognito-identity.min.js"></script>
+
+<script>
+    console.log("Verify JS loaded");
+
+    const poolData = {
+        UserPoolId: "us-east-1_T7miCG8ku",
+        ClientId:   "738npaun27nj4l1krqfub8hhhd"
+    };
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    const statusMsg = document.getElementById("statusMsg");
+    const verifyForm = document.getElementById("verifyForm");
+
+    //Support BOTH styles of URL params:
+    // - verify.html?email=...
+    // - verify.html?verifyEmail=...&verifyCode=...
+    const params = new URLSearchParams(window.location.search);
+    const emailParam =
+        params.get("email") || params.get("verifyEmail") || "";
+    const codeParam =
+        params.get("code") || params.get("verifyCode") || "";
+
+    if (emailParam) document.getElementById("verifyEmail").value = emailParam;
+    if (codeParam) document.getElementById("verifyCode").value = codeParam;
+
+    verifyForm.addEventListener("submit", function (e) {
+        e.preventDefault(); //stops page from reloading
+
+        const email = document.getElementById("verifyEmail").value.trim();
+        const code  = document.getElementById("verifyCode").value.trim();
+
+        statusMsg.textContent = "Verifying…";
+
+        const userData = { Username: email, Pool: userPool };
+        const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+        cognitoUser.confirmRegistration(code, true, function (err, result) {
+            if (err) {
+                console.error("confirmRegistration error:", err);
+                statusMsg.textContent = "Verification failed: " + (err.message || JSON.stringify(err));
+                return;
+            }
+
+            statusMsg.textContent = "Email verified successfully! Redirecting to login…";
+            setTimeout(() => (window.location.href = "login.html"), 700);
+        });
+    });
+</script>
+
+<!-- Local Cognito SDK -->
+<script src="js/amazon-cognito-identity.min.js"></script>
+
+<script>
+    // If you don't see this alert, your script is not running.
+    alert("verify.html script loaded");
+
+    const poolData = {
+        UserPoolId: "us-east-1_T7miCG8ku",
+        ClientId:   "738npaun27nj4l1krqfub8hhhd"
+    };
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    const form = document.getElementById("verifyForm");
+    form.addEventListener("submit", function(e) {
+        e.preventDefault(); //stops page refresh
+
+        const email = document.getElementById("verifyEmail").value.trim();
+        const code  = document.getElementById("verifyCode").value.trim();
+
+        const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
+            Username: email,
+            Pool: userPool
+        });
+
+        cognitoUser.confirmRegistration(code, true, function(err, result) {
+            if (err) {
+                alert("Verify failed: " + (err.message || JSON.stringify(err)));
+                return;
+            }
+            alert("Verified! Redirecting to login...");
+            window.location.href = "login.html";
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
