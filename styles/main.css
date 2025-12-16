@@ -499,4 +499,47 @@ a:hover {
     background: #00b8a9;
 }
 
+.ai-greeter {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #0d1b2a;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.45);
+    z-index: 1000;
+    width: 340px;
+}
+
+.ai-greeter img {
+    width: 100px;
+    height: 100px;
+}
+
+.ai-chat {
+    flex: 1;
+}
+
+.ai-message {
+    color: #fff;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    min-height: 40px;
+}
+
+#ai-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 0.85rem;
+}
+
+
+
 
