@@ -33,9 +33,10 @@
 <!-- Login Form Section -->
 <section class="news">
     <h2>Login</h2>
+    <button id="cognito-login-btn">Continue with CyberWatch Account</button>
     <form class="login-form">
-        <label for="username">Username or Email:</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" placeholder="Enter your email" required>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" placeholder="Enter your password" required>
@@ -43,7 +44,7 @@
         <button type="submit" class="btn">Log In</button>
 
         <p class="login-footer">
-            Don’t have an account? <a href="#">Sign up here</a>
+            Don’t have an account? <a href="registration.html">Sign up here</a>
         </p>
     </form>
 </section>
@@ -57,5 +58,44 @@
         <a href="#">GitHub</a>
     </div>
 </footer>
+
+<script>
+    const API_BASE = "https://j917yl3f4d.execute-api.us-east-1.amazonaws.com/dev";
+
+    document.querySelector(".login-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert("Login failed: " + data.message);
+                return;
+            }
+
+            // Save session token and userId locally
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("userId", data.userId);
+            localStorage.setItem("email", data.email);
+
+            alert("Login successful!");
+            window.location.href = "index.html";  // redirect to main page
+
+        } catch (err) {
+            console.error(err);
+            alert("Login failed. Check console.");
+        }
+    });
+</script>
+
 </body>
 </html>

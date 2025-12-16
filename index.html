@@ -3,30 +3,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CyberWatch - Home</title>
+    <title>CyberWatch - Trending News</title>
     <link rel="stylesheet" href="styles/main.css" />
 </head>
 <body>
-
-<!-- AI Assistant -->
-<div id="ai-greeter" class="ai-greeter">
-    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="CyberWatch Bot">
-    <div class="ai-chat">
-        <div class="ai-message" id="ai-message">
-            👋 Hi! How can I help you today?
-        </div>
-        <input type="text" id="ai-input" placeholder="Ask me something..." />
-    </div>
-</div>
-
-
-
 <!-- Navbar -->
 <header class="navbar">
-    <a href="index.html" class="logo">CyberWatch</a>
+    <a href="index.html" class="logo"> CyberWatch</a>
     <nav>
         <ul>
-            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="blogs.html">User Blogs</a></li>
             <li><a href="learn.html">Learning</a></li>
             <li><a href="login.html">Login</a></li>
@@ -36,91 +22,52 @@
     </nav>
 </header>
 
-<!-- Hero Section -->
+<!-- Hero -->
 <section class="hero">
     <div class="hero-content">
         <h1>Stay Ahead in the Cyber World</h1>
-        <p>Your trusted source for cybersecurity news, awareness, and learning.</p>
-        <a href="blogs.html" class="btn">Read Blogs</a>
+        <p>Your trusted source for the latest cybersecurity news, trends, and insights.</p>
+        <a href="blogs.html" class="btn">Read User Blogs</a>
         <a href="learn.html" class="btn">Start Learning</a>
     </div>
 </section>
 
-<!-- Features Section -->
+<!-- News Section -->
 <section class="news">
-    <h2>What CyberWatch Offers</h2>
+    <h2>Trending News</h2>
     <div class="news-grid">
-
         <article class="card">
-            <h3>Cybersecurity Awareness</h3>
-            <p>Learn how to stay safe online and protect your personal data.</p>
+            <img src="https://source.unsplash.com/400x250/?cybersecurity" alt="Cybersecurity" />
+            <h3>Major Data Breach Affects Millions</h3>
+            <p>Experts warn of growing threats as corporations face new cyberattacks worldwide.</p>
+            <a href="#" class="read-more">Read More →</a>
         </article>
 
         <article class="card">
-            <h3>User Blogs</h3>
-            <p>Read insights and experiences shared by other CyberWatch users.</p>
+            <img src="https://source.unsplash.com/400x250/?hacker" alt="Hacker" />
+            <h3>Inside the Dark Web’s Latest Trends</h3>
+            <p>Exploring the evolving underground markets driving global cybercrime.</p>
+            <a href="#" class="read-more">Read More →</a>
         </article>
 
         <article class="card">
-            <h3>Secure Accounts</h3>
-            <p>Create an account and log in securely using modern authentication practices.</p>
+            <img src="https://source.unsplash.com/400x250/?network" alt="Network" />
+            <h3>AI in Cyber Defense</h3>
+            <p>Artificial intelligence is changing how organizations detect and respond to threats.</p>
+            <a href="#" class="read-more">Read More →</a>
         </article>
-
     </div>
 </section>
 
 <!-- Footer -->
 <footer class="footer">
-    <p>© 2025 CyberWatch | Educational Project</p>
+    <p>© 2025 CyberWatch </p>
     <div class="socials">
         <a href="#">Twitter</a>
         <a href="#">LinkedIn</a>
         <a href="#">GitHub</a>
     </div>
 </footer>
-
-<!-- AI Greeter Script -->
-<script>
-    const aiMessage = document.getElementById("ai-message");
-    const aiInput = document.getElementById("ai-input");
-
-    aiInput.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-            handleAI(aiInput.value.toLowerCase());
-            aiInput.value = "";
-        }
-    });
-
-    function handleAI(input) {
-        if (input.includes("blog", "articles")) {
-            aiMessage.textContent = "📚 Taking you to User Blogs!";
-            setTimeout(() => window.location.href = "blogs.html", 1500);
-
-        } else if (input.includes("learn", "education", "school") || input.includes("education")) {
-            aiMessage.textContent = "🎓 Let’s start learning cybersecurity!";
-            setTimeout(() => window.location.href = "learn.html", 1500);
-
-        } else if (input.includes("login") || input.includes("sign in")) {
-            aiMessage.textContent = "🔐 Redirecting you to login.";
-            setTimeout(() => window.location.href = "login.html", 1500);
-
-        } else if (input.includes("register") || input.includes("sign up")) {
-            aiMessage.textContent = "📝 Let’s create your account!";
-            setTimeout(() => window.location.href = "registration.html", 1500);
-
-        } else if (input.includes("about")) {
-            aiMessage.textContent = "ℹ️ Here’s more about CyberWatch.";
-            setTimeout(() => window.location.href = "about.html", 1500);
-
-        } else {
-            aiMessage.textContent =
-                "🤖 I can help you find blogs, learning content, login, or registration pages!";
-        }
-    }
-</script>
-
-
-
 </body>
 </html>
 

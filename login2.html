@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberWatch - Login</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+<!-- Navbar -->
+<header class="navbar">
+    <a href="index.html" class="logo"> CyberWatch</a>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blogs.html">User Blogs</a></li>
+            <li><a href="learn.html">Learning</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="registration.html">Sign Up</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="mfa-setup.html">MFA Setup</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero small-hero">
+    <div class="hero-content">
+        <h1>Welcome Back</h1>
+        <p>Log in to access your CyberWatch dashboard.</p>
+    </div>
+</section>
+
+<!-- Login Form Section -->
+<section class="news">
+    <h2>Login</h2>
+    <button id="cognito-login-btn">Continue with CyberWatch Account</button>
+    <form class="login-form">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" placeholder="Enter your email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit" class="btn">Log In</button>
+
+        <p class="login-footer">
+            Don’t have an account? <a href="registration.html">Sign up here</a>
+        </p>
+
+    </form>
+    <!-- MFA step (hidden until Cognito says MFA is required) -->
+    <div id="mfa-section" style="display:none; margin-top: 1rem;">
+        <p>Enter the 6-digit code from your Authenticator app:</p>
+        <input id="mfaCode" type="text" placeholder="123456" />
+        <button id="mfaSubmitBtn" class="btn" type="button">Submit MFA Code</button>
+    </div>
+
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© 2025 CyberWatch</p>
+    <div class="socials">
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+    </div>
+</footer>
+
+<script src="js/amazon-cognito-identity.min.js"></script>
+<script>
+    console.log("Login JS loaded ✅");
+
+    const poolData = {
+        UserPoolId: "us-east-1_T7miCG8ku",
+        ClientId: "738npaun27nj4l1krqfub8hhhd" // make sure this is your SPA client id
+    };
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    const loginForm    = document.querySelector(".login-form");
+    const mfaSection   = document.getElementById("mfa-section");
+    const mfaCodeInput = document.getElementById("mfaCode");
+    const mfaSubmitBtn = document.getElementById("mfaSubmitBtn");
+
+    let currentUser = null;
+    let callbacks   = null;
+
+    loginForm.addEventListener("submit", function (e) {
+        e.preventDefault(); // ✅ stops login.html?email=...&password=...
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const authDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+            Username: email,
+            Password: password
+        });
+
+        currentUser = new AmazonCognitoIdentity.CognitoUser({
+            Username: email,
+            Pool: userPool
+        });
+
+        callbacks = {
+            onSuccess: function (result) {
+                localStorage.setItem("idToken", result.getIdToken().getJwtToken());
+                localStorage.setItem("accessToken", result.getAccessToken().getJwtToken());
+                localStorage.setItem("userEmail", email);
+
+                alert("Login successful!");
+                window.location.href = "index.html";
+            },
+
+            onFailure: function (err) {
+                console.error(err);
+                alert(err.message || JSON.stringify(err));
+            },
+
+            mfaRequired: function () {
+                mfaSection.style.display = "block";
+                alert("MFA required. Enter the 6-digit code from Google Authenticator.");
+            },
+
+            totpRequired: function () {
+                mfaSection.style.display = "block";
+                alert("MFA required. Enter the 6-digit code from Google Authenticator.");
+            }
+        };
+
+        currentUser.authenticateUser(authDetails, callbacks);
+    });
+
+    mfaSubmitBtn.addEventListener("click", function () {
+        const code = mfaCodeInput.value.trim();
+        if (!code) return alert("Enter the 6-digit code.");
+
+        if (!currentUser || !callbacks) return alert("No login in progress. Try again.");
+
+        // ✅ Explicitly tell Cognito this is TOTP MFA
+        currentUser.sendMFACode(code, callbacks, "SOFTWARE_TOKEN_MFA");
+    });
+</script>
+
+</body>
+</html>
