@@ -540,6 +540,77 @@ a:hover {
     font-size: 0.85rem;
 }
 
+/* ---------------------------------
+   COURSES / LEARNING RESULTS FIX
+--------------------------------- */
+
+/* Override center alignment for learning content */
+.news .learning-form,
+.news #course-results {
+    text-align: left;
+}
+
+/* Course results container */
+#course-results {
+    margin-top: 20px;
+    background: #161616;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 234, 0.2);
+}
+
+/* Course list reset */
+#course-results ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+/* Individual course item */
+#course-results li {
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    font-size: 0.95rem;
+}
+
+/* Remove border on last item */
+#course-results li:last-child {
+    border-bottom: none;
+}
+
+/* Course company name */
+#course-results strong {
+    color: #00ffea;
+}
+
+/* Course links */
+#course-results a {
+    color: #00ffea;
+    font-weight: bold;
+}
+
+#course-results a:hover {
+    text-decoration: underline;
+}
+
+/* Align selects and input nicely */
+.learning-form select,
+.learning-form input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    background: #222;
+    color: #f0f0f0;
+    border: none;
+}
+
+/* Button spacing fix */
+.learning-form .btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
 
 
 

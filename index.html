@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="styles/main.css" />
 </head>
 <body>
+
+<!-- AI Assistant -->
+<div id="ai-greeter" class="ai-greeter">
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="CyberWatch Bot">
+    <div class="ai-chat">
+        <div class="ai-message" id="ai-message">
+            👋 Hi! How can I help you today?
+        </div>
+        <input type="text" id="ai-input" placeholder="Ask me something..." />
+    </div>
+</div>
+
 <!-- Navbar -->
 <header class="navbar">
     <a href="index.html" class="logo"> CyberWatch</a>
@@ -52,7 +64,7 @@
 
         <article class="card">
             <img src="https://source.unsplash.com/400x250/?network" alt="Network" />
-            <h3>AI in Cyber Defense</h3>
+            <h3>AI in Cyber Defense</h3>~
             <p>Artificial intelligence is changing how organizations detect and respond to threats.</p>
             <a href="#" class="read-more">Read More →</a>
         </article>
@@ -68,6 +80,52 @@
         <a href="#">GitHub</a>
     </div>
 </footer>
+<script>
+    const aiMessage = document.getElementById("ai-message");
+    const aiInput = document.getElementById("ai-input");
+
+
+    aiInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            handleAI(aiInput.value.toLowerCase());
+            aiInput.value = "";
+        }
+    });
+
+
+    function handleAI(input) {
+        if (input.includes("blog", "articles")) {
+            aiMessage.textContent = "📚 Taking you to User Blogs!";
+            setTimeout(() => window.location.href = "blogs.html", 1500);
+
+
+        } else if (input.includes("learn", "education", "school") || input.includes("education")) {
+            aiMessage.textContent = "🎓 Let’s start learning cybersecurity!";
+            setTimeout(() => window.location.href = "learn.html", 1500);
+
+
+        } else if (input.includes("login") || input.includes("sign in")) {
+            aiMessage.textContent = "🔐 Redirecting you to login.";
+            setTimeout(() => window.location.href = "login.html", 1500);
+
+
+        } else if (input.includes("register") || input.includes("sign up")) {
+            aiMessage.textContent = "📝 Let’s create your account!";
+            setTimeout(() => window.location.href = "registration.html", 1500);
+
+
+        } else if (input.includes("about")) {
+            aiMessage.textContent = "ℹ️ Here’s more about CyberWatch.";
+            setTimeout(() => window.location.href = "about.html", 1500);
+
+
+        } else {
+            aiMessage.textContent =
+                "🤖 I can help you find blogs, learning content, login, or registration pages!";
+        }
+    }
+</script>
+
 </body>
 </html>
 
