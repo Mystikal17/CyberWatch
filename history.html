@@ -67,11 +67,36 @@
     </div>
 </footer>
 
-<!-- Optional: placeholder JS for Clear History -->
 <script>
-    document.querySelector('.clear-history').addEventListener('click', () => {
-        document.querySelector('.history-list').innerHTML = '<p>Your history has been cleared.</p>';
+    const historyList = document.querySelector(".history-list");
+    const clearBtn = document.querySelector(".clear-history");
+
+    function loadHistory() {
+        const history = JSON.parse(localStorage.getItem("cyberwatchHistory")) || [];
+
+        if (history.length === 0) {
+            historyList.innerHTML = "<p>No history yet.</p>";
+            return;
+        }
+
+        historyList.innerHTML = history.map(item => `
+        <div class="history-item">
+            <h3>${item.title}</h3>
+            <p>Viewed on: ${item.date}</p>
+            <a href="${item.url}" class="read-more">Read Again →</a>
+        </div>
+    `).join("");
+    }
+
+    clearBtn.addEventListener("click", () => {
+        localStorage.removeItem("cyberwatchHistory");
+        historyList.innerHTML = "<p>Your history has been cleared.</p>";
     });
+
+    loadHistory();
+</script>
+
+
 </script>
 </body>
 </html>

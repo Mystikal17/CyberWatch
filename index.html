@@ -21,15 +21,27 @@
 
 <!-- Navbar -->
 <header class="navbar">
-    <a href="index.html" class="logo"> CyberWatch</a>
+    <a href="index.html" class="logo">CyberWatch</a>
+
+    <!-- 🔍 SEARCH ADDED -->
+    <div class="search-container">
+        <input
+                type="text"
+                id="search-input"
+                placeholder="Search CyberWatch..."
+        />
+        <div id="search-results"></div>
+    </div>
+
     <nav>
         <ul>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html" class="active">Home</a></li>
             <li><a href="blogs.html">User Blogs</a></li>
             <li><a href="learn.html">Learning</a></li>
             <li><a href="login.html">Login</a></li>
             <li><a href="registration.html">Sign Up</a></li>
             <li><a href="about.html">About</a></li>
+            <li><a href="history.html">History</a></li>
         </ul>
     </nav>
 </header>
@@ -64,7 +76,7 @@
 
         <article class="card">
             <img src="https://source.unsplash.com/400x250/?network" alt="Network" />
-            <h3>AI in Cyber Defense</h3>~
+            <h3>AI in Cyber Defense</h3>
             <p>Artificial intelligence is changing how organizations detect and respond to threats.</p>
             <a href="#" class="read-more">Read More →</a>
         </article>
@@ -73,17 +85,21 @@
 
 <!-- Footer -->
 <footer class="footer">
-    <p>© 2025 CyberWatch </p>
+    <p>© 2025 CyberWatch</p>
     <div class="socials">
         <a href="#">Twitter</a>
         <a href="#">LinkedIn</a>
         <a href="#">GitHub</a>
     </div>
 </footer>
+
+<!-- 🔍 SEARCH SCRIPT (shared across all pages) -->
+<script src="search.js"></script>
+
+<!-- AI BOT SCRIPT (unchanged) -->
 <script>
     const aiMessage = document.getElementById("ai-message");
     const aiInput = document.getElementById("ai-input");
-
 
     aiInput.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
@@ -92,33 +108,22 @@
         }
     });
 
-
     function handleAI(input) {
-        if (input.includes("blog", "articles")) {
+        if (input.includes("blog")) {
             aiMessage.textContent = "📚 Taking you to User Blogs!";
             setTimeout(() => window.location.href = "blogs.html", 1500);
-
-
-        } else if (input.includes("learn", "education", "school") || input.includes("education")) {
+        } else if (input.includes("learn") || input.includes("education")) {
             aiMessage.textContent = "🎓 Let’s start learning cybersecurity!";
             setTimeout(() => window.location.href = "learn.html", 1500);
-
-
-        } else if (input.includes("login") || input.includes("sign in")) {
+        } else if (input.includes("login")) {
             aiMessage.textContent = "🔐 Redirecting you to login.";
             setTimeout(() => window.location.href = "login.html", 1500);
-
-
         } else if (input.includes("register") || input.includes("sign up")) {
             aiMessage.textContent = "📝 Let’s create your account!";
             setTimeout(() => window.location.href = "registration.html", 1500);
-
-
         } else if (input.includes("about")) {
             aiMessage.textContent = "ℹ️ Here’s more about CyberWatch.";
             setTimeout(() => window.location.href = "about.html", 1500);
-
-
         } else {
             aiMessage.textContent =
                 "🤖 I can help you find blogs, learning content, login, or registration pages!";
@@ -128,4 +133,3 @@
 
 </body>
 </html>
-
