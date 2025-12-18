@@ -611,4 +611,121 @@ a:hover {
     margin-top: 10px;
 }
 
+/* ---------------------------------
+   VERIFY + MFA PAGES (verify.html, mfa-setup.html)
+--------------------------------- */
+
+/* Shared form card style for verify + MFA */
+.verify-form,
+.mfa-form {
+    max-width: 650px;
+    margin: 2rem auto;
+    background: #161616;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 234, 0.2);
+    text-align: left;
+}
+
+/* Labels + inputs */
+.verify-form label,
+.mfa-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #00ffea;
+}
+
+.verify-form input,
+.mfa-form input {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    background: #222;
+    color: #f0f0f0;
+}
+
+.verify-form input:focus,
+.mfa-form input:focus {
+    outline: 2px solid #00ffea;
+}
+
+/* Make the submit button full width (matches register page) */
+.verify-form .btn,
+.mfa-form .btn {
+    width: 100%;
+}
+
+/* Status message line (success/error text) */
+#statusMsg {
+    text-align: center;
+    margin: 0.75rem auto 1.25rem;
+    color: #cccccc;
+}
+
+/* QR container and QR canvas/img */
+#qrContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.25rem 0;
+}
+
+#qrContainer img,
+#qrContainer canvas {
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 18px rgba(0, 255, 234, 0.2);
+}
+
+/* Secret code display */
+#mfaSecret {
+    display: inline-block;
+    margin: 0.75rem auto 1.25rem;
+    padding: 0.6rem 1rem;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #00ffea;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    word-break: break-all;
+}
+
+/* Nicely align “email + code + button” row on wider screens if you use inline layout */
+.verify-inline-row,
+.mfa-inline-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.verify-inline-row .field,
+.mfa-inline-row .field {
+    flex: 1;
+}
+
+.verify-inline-row .btn,
+.mfa-inline-row .btn {
+    width: auto;
+    white-space: nowrap;
+}
+
+/* Responsive: stack everything on small screens */
+@media (max-width: 700px) {
+    .verify-inline-row,
+    .mfa-inline-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .verify-inline-row .btn,
+    .mfa-inline-row .btn {
+        width: 100%;
+    }
+}
+
+
 
