@@ -69,25 +69,11 @@
     </div>
 </footer>
 
-<script>alert("NEW verify.html loaded");</script>
-
-
-<!-- Cognito SDK -->
-
-<script src="js/amazon-cognito-identity.min.js"></script>
-<script>
-    const poolData = {
-        UserPoolId: "us-east-1_T7miCG8ku",  // e.g. "us-east-1_AbCdEf123"
-        ClientId:   "738npaun27nj4l1krqfub8hhhd"  // e.g. "1a2b3c4d5e6f7g8h9i"
-    };
-    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-</script>
-
-<!-- Local Cognito SDK -->
+<!-- Include Cognito SDK ONCE -->
 <script src="js/amazon-cognito-identity.min.js"></script>
 
 <script>
-    console.log("Verify JS loaded");
+    console.log("Verify JS loaded ✅");
 
     const poolData = {
         UserPoolId: "us-east-1_T7miCG8ku",
@@ -97,80 +83,44 @@
 
     const statusMsg = document.getElementById("statusMsg");
     const verifyForm = document.getElementById("verifyForm");
+    const emailInput = document.getElementById("verifyEmail");
+    const codeInput  = document.getElementById("verifyCode");
 
-    //Support BOTH styles of URL params:
-    // - verify.html?email=...
-    // - verify.html?verifyEmail=...&verifyCode=...
+    // Support URL params:
+    // verify.html?verifyEmail=...&verifyCode=...
+    // verify.html?email=...&code=...
     const params = new URLSearchParams(window.location.search);
-    const emailParam =
-        params.get("email") || params.get("verifyEmail") || "";
-    const codeParam =
-        params.get("code") || params.get("verifyCode") || "";
+    const emailParam = params.get("verifyEmail") || params.get("email") || "";
+    const codeParam  = params.get("verifyCode")  || params.get("code")  || "";
 
-    if (emailParam) document.getElementById("verifyEmail").value = emailParam;
-    if (codeParam) document.getElementById("verifyCode").value = codeParam;
+    if (emailParam) emailInput.value = emailParam;
+    if (codeParam)  codeInput.value  = codeParam;
 
     verifyForm.addEventListener("submit", function (e) {
-        e.preventDefault(); //stops page from reloading
+        e.preventDefault(); // ✅ prevents verify.html? reload
 
-        const email = document.getElementById("verifyEmail").value.trim();
-        const code  = document.getElementById("verifyCode").value.trim();
+        const email = emailInput.value.trim();
+        const code  = codeInput.value.trim();
 
         statusMsg.textContent = "Verifying…";
-
-        const userData = { Username: email, Pool: userPool };
-        const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-        cognitoUser.confirmRegistration(code, true, function (err, result) {
-            if (err) {
-                console.error("confirmRegistration error:", err);
-                statusMsg.textContent = "Verification failed: " + (err.message || JSON.stringify(err));
-                return;
-            }
-
-            statusMsg.textContent = "Email verified successfully! Redirecting to login…";
-            setTimeout(() => (window.location.href = "login.html"), 700);
-        });
-    });
-</script>
-
-<!-- Local Cognito SDK -->
-<script src="js/amazon-cognito-identity.min.js"></script>
-
-<script>
-    // If you don't see this alert, your script is not running.
-    alert("verify.html script loaded");
-
-    const poolData = {
-        UserPoolId: "us-east-1_T7miCG8ku",
-        ClientId:   "738npaun27nj4l1krqfub8hhhd"
-    };
-    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-
-    const form = document.getElementById("verifyForm");
-    form.addEventListener("submit", function(e) {
-        e.preventDefault(); //stops page refresh
-
-        const email = document.getElementById("verifyEmail").value.trim();
-        const code  = document.getElementById("verifyCode").value.trim();
 
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
             Username: email,
             Pool: userPool
         });
 
-        cognitoUser.confirmRegistration(code, true, function(err, result) {
+        cognitoUser.confirmRegistration(code, true, function (err) {
             if (err) {
-                alert("Verify failed: " + (err.message || JSON.stringify(err)));
+                console.error(err);
+                statusMsg.textContent = "Verification failed: " + (err.message || JSON.stringify(err));
                 return;
             }
-            alert("Verified! Redirecting to login...");
-            window.location.href = "login.html";
+
+            statusMsg.textContent = "Verified! Redirecting to login…";
+            setTimeout(() => window.location.href = "login.html", 800);
         });
     });
 </script>
-
-
 
 </body>
 </html>
