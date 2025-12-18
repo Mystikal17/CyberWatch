@@ -1,0 +1,33 @@
+[
+  {
+    "title": "Home",
+    "link": "index.html",
+    "content": "CyberWatch cybersecurity awareness platform homepage"
+  },
+  {
+    "title": "User Blogs",
+    "link": "blogs.html",
+    "content": "User blogs about cybersecurity trends threats and experiences"
+  },
+  {
+    "title": "Learning",
+    "link": "learn.html",
+    "content": "Learning resources cybersecurity fundamentals awareness training"
+  },
+  {
+    "title": "Login",
+    "link": "login.html",
+    "content": "Login to CyberWatch user account authentication"
+  },
+  {
+    "title": "Registration",
+    "link": "registration.html",
+    "content": "Create CyberWatch account sign up registration"
+  },
+  {
+    "title": "About",
+    "link": "about.html",
+    "content": "About CyberWatch mission cybersecurity education who we are"
+  }
+
+]

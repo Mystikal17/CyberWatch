@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="styles/main.css" />
 </head>
 <body>
+
+<!-- Navbar -->
 <header class="navbar">
-    <a href="index.html" class="logo"> CyberWatch</a>
+    <a href="index.html" class="logo">CyberWatch</a>
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="blogs.html">User Blogs</a></li>
-            <li><a href="learn.html">Learning</a></li>
+            <li><a href="learn.html" class="active">Learning</a></li>
             <li><a href="login.html">Login</a></li>
             <li><a href="registration.html">Sign Up</a></li>
             <li><a href="about.html">About</a></li>
@@ -21,45 +23,214 @@
     </nav>
 </header>
 
+<!-- Hero -->
 <section class="hero small-hero">
     <div class="hero-content">
         <h1>Learning Hub</h1>
-        <p>Tell us your skill level and interests, and we’ll suggest where to start.</p>
+        <p>Choose your skill level and interests to find recommended learning resources.</p>
     </div>
 </section>
 
+<!-- Learning Section -->
 <section class="news">
-    <h2>Personalized Learning</h2>
-    <form class="learning-form">
-        <label for="skill">Skill Level:</label>
-        <select id="skill" name="skill" required>
-            <option value="">-- Select your level --</option>
+    <h2>Course Recommendations</h2>
+
+    <!-- ✅ THIS FIXES YOUR CSS -->
+    <div class="learning-form">
+
+        <label for="level">Experience Level:</label>
+        <select id="level">
+            <option value="">Any</option>
             <option value="beginner">Beginner</option>
             <option value="intermediate">Intermediate</option>
             <option value="advanced">Advanced</option>
         </select>
 
-        <label for="interest">What are you interested in?</label>
-        <select id="interest" name="interest" required>
-            <option value="">-- Choose an area --</option>
-            <option value="network-security">Network Security</option>
-            <option value="ethical-hacking">Ethical Hacking</option>
-            <option value="malware-analysis">Malware Analysis</option>
-            <option value="digital-forensics">Digital Forensics</option>
-            <option value="cyber-law">Cyber Law & Policy</option>
+        <label for="topic">Topic:</label>
+        <select id="topic">
+            <option value="">Any</option>
+            <option value="network">Network Security</option>
+            <option value="hacking">Ethical Hacking</option>
+            <option value="forensics">Digital Forensics</option>
+            <option value="malware">Malware Analysis</option>
+            <option value="law">Cyber Law</option>
         </select>
 
-        <button type="submit" class="btn">Get Recommendations</button>
-    </form>
+        <label for="company">Company (optional):</label>
+        <input type="text" id="company" placeholder="e.g. Coursera, Udemy" />
+
+        <button type="button" class="btn" onclick="getCourses()">
+            Get Courses
+        </button>
+    </div>
+
+    <!-- Results -->
+    <div id="course-results" class="recommendations"></div>
 </section>
 
+<!-- Footer -->
 <footer class="footer">
-    <p>© 2025 CyberWatch </p>
+    <p>© 2025 CyberWatch</p>
     <div class="socials">
         <a href="#">Twitter</a>
         <a href="#">LinkedIn</a>
         <a href="#">GitHub</a>
     </div>
 </footer>
+
+<!-- Course Logic -->
+<script>
+    const courses = [
+        /* ---------------- Beginner ---------------- */
+        {
+            company: "Coursera",
+            level: "beginner",
+            topic: "network",
+            title: "Introduction to Network Security",
+            link: "https://www.coursera.org/search?query=network%20security"
+        },
+        {
+            company: "edX",
+            level: "beginner",
+            topic: "network",
+            title: "Cybersecurity Fundamentals",
+            link: "https://www.edx.org/learn/cybersecurity"
+        },
+        {
+            company: "Udemy",
+            level: "beginner",
+            topic: "hacking",
+            title: "Ethical Hacking for Beginners",
+            link: "https://www.udemy.com/topic/ethical-hacking/"
+        },
+        {
+            company: "TryHackMe",
+            level: "beginner",
+            topic: "hacking",
+            title: "Intro to Cyber Security",
+            link: "https://tryhackme.com/path/outline/intro-to-cyber-security"
+        },
+        {
+            company: "Cybrary",
+            level: "beginner",
+            topic: "forensics",
+            title: "Introduction to Digital Forensics",
+            link: "https://www.cybrary.it/course/digital-forensics/"
+        },
+        {
+            company: "Coursera",
+            level: "beginner",
+            topic: "law",
+            title: "Cybersecurity Law & Policy",
+            link: "https://www.coursera.org/learn/cybersecurity-law"
+        },
+
+        /* ---------------- Intermediate ---------------- */
+        {
+            company: "TryHackMe",
+            level: "intermediate",
+            topic: "hacking",
+            title: "Offensive Pentesting Path",
+            link: "https://tryhackme.com/path/outline/pentesting"
+        },
+        {
+            company: "Hack The Box",
+            level: "intermediate",
+            topic: "hacking",
+            title: "Academy Penetration Testing",
+            link: "https://academy.hackthebox.com/"
+        },
+        {
+            company: "Cybrary",
+            level: "intermediate",
+            topic: "network",
+            title: "Network Defense & Monitoring",
+            link: "https://www.cybrary.it/course/network-defense/"
+        },
+        {
+            company: "Coursera",
+            level: "intermediate",
+            topic: "malware",
+            title: "Malware Analysis Basics",
+            link: "https://www.coursera.org/search?query=malware%20analysis"
+        },
+        {
+            company: "edX",
+            level: "intermediate",
+            topic: "forensics",
+            title: "Computer Forensics",
+            link: "https://www.edx.org/learn/computer-forensics"
+        },
+
+        /* ---------------- Advanced ---------------- */
+        {
+            company: "Offensive Security",
+            level: "advanced",
+            topic: "hacking",
+            title: "OSCP – Penetration Testing",
+            link: "https://www.offsec.com/courses/pen-200/"
+        },
+        {
+            company: "SANS Institute",
+            level: "advanced",
+            topic: "forensics",
+            title: "Advanced Digital Forensics",
+            link: "https://www.sans.org/cyber-security-courses/digital-forensics/"
+        },
+        {
+            company: "Offensive Security",
+            level: "advanced",
+            topic: "malware",
+            title: "Advanced Malware Analysis",
+            link: "https://www.offsec.com/courses/exp-301/"
+        },
+        {
+            company: "MIT OpenCourseWare",
+            level: "advanced",
+            topic: "network",
+            title: "Advanced Network Security",
+            link: "https://ocw.mit.edu/search/?q=network%20security"
+        },
+        {
+            company: "edX",
+            level: "advanced",
+            topic: "law",
+            title: "International Cyber Law",
+            link: "https://www.edx.org/search?q=cyber%20law"
+        }
+    ];
+
+
+    function getCourses() {
+        const level = document.getElementById("level").value;
+        const topic = document.getElementById("topic").value;
+        const companyInput = document.getElementById("company").value.toLowerCase();
+        const output = document.getElementById("course-results");
+
+        const results = courses.filter(c =>
+            (!level || c.level === level) &&
+            (!topic || c.topic === topic) &&
+            (!companyInput || c.company.toLowerCase().includes(companyInput))
+        );
+
+        if (!results.length) {
+            output.innerHTML = "<p>No courses found.</p>";
+            return;
+        }
+
+        output.innerHTML = `
+        <h3>Recommended Courses</h3>
+        <ul>
+            ${results.map(c => `
+                <li>
+                    <strong>${c.company}</strong> —
+                    <a href="${c.link}" target="_blank">${c.title}</a>
+                </li>
+            `).join("")}
+        </ul>
+    `;
+    }
+</script>
+
 </body>
 </html>
